@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>卒業研究 実験フォーム</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tone.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+  <style>
+    body {
+      background-color: #ede7f6;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    .form-header-bar {
+      height: 10px;
+      background: linear-gradient(90deg, #673ab7, #9c27b0);
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+    }
+    video::-webkit-media-controls {
+      display: none !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 p-4 md:p-8 flex flex-col items-center">
+
+  <div class="w-full max-w-2xl">
+
+    <!-- 1. 実験説明画面 -->
+    <div id="intro-screen" class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden mb-6">
+      <div class="form-header-bar"></div>
+      <div class="p-6 md:p-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">カートゥーンアニメーションの感情認知に関する実験</h1>
+        
+        <div class="mb-6 text-sm text-slate-700 space-y-3 leading-relaxed">
+          <p><span class="font-bold text-purple-700">クレショフ効果とは:</span> 「同じ映像でも、前後にどんな映像を置くかによって、観客がその人物の表情に違う意味を感じる」という映画表現の効果です。</p>
+          <p>1番目のシーン (3秒) が流れたあと、暗転を挟んで、2番目のキャラクターの画像 (1秒)がパッと映ります。</p>
+          <p>画面が『回答してください』に切り替わったら、各項目で最も近いと感じたものにチェックをつけてください。できるだけ「直感」で回答するようにしてください。</p>
+        </div>
+
+        <div class="bg-purple-50 border-l-4 border-purple-600 p-4 rounded-r mb-6 text-sm text-purple-950 space-y-2">
+          <p class="font-bold text-base">⚠️ 実験参加上の注意（必ずお読みください）</p>
+          <ul class="list-disc list-inside space-y-1">
+            <li>各試行で流れる<strong>動画は一度しか再生できません</strong>（巻き戻し・再再生不可）。</li>
+            <li>動画終了後、直ちに<strong>30秒の解答カウントダウン</strong>が始まります。</li>
+            <li>設問は各動画につき<strong>3問</strong>あり、全<strong>21試行</strong>です。</li>
+            <li><strong>30秒</strong>が経過すると、回答中であっても自動的に次の動画へ移行します。</li>
+            <li>途中でブラウザの「戻る」ボタンやリロードは押さないでください。</li>
+          </ul>
+        </div>
+
+        <!-- 設問の事前確認エリア -->
+        <div class="bg-slate-50 border border-slate-200 p-5 rounded-md mb-6 space-y-4 pointer-events-none">
+          <h3 class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4">【事前確認】回答内容は以下の通りです（※ここでは操作できません）</h3>
+          
+          <div class="space-y-1">
+            <p class="font-semibold text-sm text-slate-700">① 1コマ目の状況</p>
+            <p class="text-xs text-slate-500 mb-2">キャラクターの置かれた状況は、彼にとってどう見えましたか?</p>
+            <div class="flex flex-wrap gap-4 text-xs text-slate-600">
+              <label><input type="checkbox" disabled> ポジティブ (良い・嬉しい状況)</label>
+              <label><input type="checkbox" disabled> ネガティブ (悪い・ピンチな状況)</label>
+              <label><input type="checkbox" disabled> 中立 (どちらでもない)</label>
+            </div>
+          </div>
+
+          <div class="space-y-1 pt-2">
+            <p class="font-semibold text-sm text-slate-700">② キャラクターの最終的な感情</p>
+            <p class="text-xs text-slate-500 mb-2">2コマ目の画像で、キャラクターは最終的にどんな感情になっていると思いますか?</p>
+            <div class="flex flex-wrap gap-3 text-xs text-slate-600">
+              <label><input type="checkbox" disabled> 嬉しい・ハッピー</label>
+              <label><input type="checkbox" disabled> 悲しい・悔しい</label>
+              <label><input type="checkbox" disabled> 驚いている</label>
+              <label><input type="checkbox" disabled> 怒っている</label>
+              <label><input type="checkbox" disabled> よくわからない</label>
+              <label class="flex items-center gap-1"><input type="checkbox" disabled> その他: <input type="text" disabled class="border border-slate-300 rounded px-1 w-20 bg-white"></label>
+            </div>
+          </div>
+
+          <div class="space-y-1 pt-2">
+            <p class="font-semibold text-sm text-slate-700">③ その判断の確信度(自信)</p>
+            <p class="text-xs text-slate-500 mb-2">その感情だと判断したことに、どれくらい自信がありますか?</p>
+            <div class="flex flex-wrap gap-4 text-xs text-slate-600">
+              <label><input type="checkbox" disabled> まったく自信がない</label>
+              <label><input type="checkbox" disabled> 少し自信がない</label>
+              <label><input type="checkbox" disabled> どちらともいえない</label>
+              <label><input type="checkbox" disabled> 少し自信がある</label>
+              <label><input type="checkbox" disabled> とても自信がある</label>
+            </div>
+          </div>
+        </div>
+
+        <form id="intro-form" onsubmit="startExperiment(event)" class="space-y-4">
+          <div>
+            <label for="participant-id" class="block font-medium text-slate-700 text-sm mb-1">
+              被験者ID / お名前 または 学籍番号 <span class="text-rose-500">*</span>
+            </label>
+            <input type="text" id="participant-id" required placeholder="例: 77069"
+                   class="w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500">
+          </div>
+
+          <div class="pt-4 text-center">
+            <button type="submit"
+                    class="w-full md:w-auto px-10 py-3 bg-purple-700 hover:bg-purple-800 text-white font-bold rounded-md shadow-lg transition duration-150 transform hover:scale-105">
+              実験を開始する
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 2. 実験試行画面 -->
+    <div id="trial-screen" class="hidden space-y-4">
+      <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4 flex items-center justify-between">
+        <div>
+          <span class="text-xs font-semibold text-purple-600 uppercase tracking-wider">Progress</span>
+          <p id="trial-counter" class="text-lg font-bold text-slate-800">動画 1 / 3</p>
+        </div>
+        <div class="w-1/2 bg-slate-100 rounded-full h-2.5 overflow-hidden">
+          <div id="overall-progress" class="bg-purple-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- タイマーバー -->
+      <div id="timer-card" class="hidden bg-white rounded-lg shadow-sm border border-slate-200 p-4 transition-all">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-bold text-slate-700 text-sm flex items-center gap-2">
+            ⏱️ 回答制限時間
+          </span>
+          <span id="timer-display" class="font-mono text-xl font-bold text-purple-700">30.0 秒</span>
+        </div>
+        <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+          <div id="timer-bar" class="bg-purple-600 h-3 rounded-full transition-all duration-100 w-full"></div>
+        </div>
+      </div>
+
+      <!-- 動画提示エリア -->
+      <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+        <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+          <span class="text-sm font-semibold text-slate-700">提示動画（1回のみ視聴可能）</span>
+          <span id="video-status-badge" class="text-xs px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-medium">再生準備完了</span>
+        </div>
+        
+        <div class="p-4 flex flex-col items-center">
+          <div class="relative w-full max-w-xl aspect-video bg-black rounded-lg overflow-hidden flex items-center justify-center">
+            <video id="stimulus-video" playsinline preload="auto" class="w-full h-full object-contain">
+              お使いのブラウザは動画タグに対応していません。
+            </video>
+
+            <div id="video-overlay" class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white">
+              <button id="play-button" onclick="playCurrentVideo()"
+                      class="px-6 py-3 bg-purple-600 hover:bg-purple-500 rounded-full font-bold flex items-center gap-2 shadow-lg transition transform hover:scale-105">
+                ▶ 動画を再生する
+              </button>
+              <p class="text-xs text-slate-300 mt-3">※再生が始まると途中で止められません</p>
+            </div>
+
+            <div id="video-error-overlay" class="hidden absolute inset-0 bg-slate-900/95 text-white flex flex-col items-center justify-center p-4 text-center">
+              <div class="text-3xl mb-2 text-rose-500">⚠️</div>
+              <p class="font-bold text-base text-rose-300">動画の読み込みに失敗しました</p>
+              <p class="text-xs text-slate-300 mt-1 max-w-sm mb-4">動画ファイル名や形式を確認してください。</p>
+              <button onclick="skipFailedVideo()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-xs rounded font-medium">
+                この動画をスキップして回答へ進む
+              </button>
+            </div>
+
+            <div id="video-locked-overlay" class="hidden absolute inset-0 bg-slate-900/90 text-white flex flex-col items-center justify-center p-4 text-center">
+              <div class="text-3xl mb-2">🔒</div>
+              <p class="font-bold text-base">動画の再生が終了しました</p>
+              <p class="text-xs text-slate-400 mt-1">下の設問に回答してください（再視聴不可）</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 設問フォーム -->
+      <div id="question-card" class="hidden bg-white rounded-lg shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+        
+        <!-- 設問1 -->
+        <div class="border-b border-slate-100 pb-5">
+          <label class="block font-medium text-slate-800 text-sm mb-1">① 1コマ目の状況 <span class="text-rose-500">*</span></label>
+          <p class="text-xs text-slate-500 mb-3">キャラクターの置かれた状況は、彼にとってどう見えましたか?</p>
+          <div class="space-y-2 text-sm text-slate-700">
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
+              <input type="radio" name="q1" value="ポジティブ" class="w-4 h-4 text-purple-600">
+              <span>ポジティブ (良い・嬉しい状況)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
+              <input type="radio" name="q1" value="ネガティブ" class="w-4 h-4 text-purple-600">
+              <span>ネガティブ (悪い・ピンチな状況)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
+              <input type="radio" name="q1" value="中立" class="w-4 h-4 text-purple-600">
+              <span>中立 (どちらでもない)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 設問2 -->
+        <div class="border-b border-slate-100 pb-5">
+          <label class="block font-medium text-slate-800 text-sm mb-1">② キャラクターの最終的な感情 <span class="text-rose-500">*</span></label>
+          <p class="text-xs text-slate-500 mb-3">2コマ目の画像で、キャラクターは最終的にどんな感情になっていると思いますか? (最も近いもの1つ)</p>
+          <div class="grid grid-cols-2 gap-2 text-sm text-slate-700 mb-2">
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
+              <input type="radio" name="q2" value="嬉しい・ハッピー" class="w-4 h-4 text-purple-600" onchange="document.getElementById('q2-other-text').disabled = true">
+              <span>嬉しい・ハッピー</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
+              <input type="radio" name="q2" value="悲しい・悔しい" class="w-4 h-4 text-purple-600" onchange="document.getElementById('q2-other-text').disabled = true">
+              <span>悲しい・悔しい</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
+              <input type="radio" name="q2" value="驚いている" class="w-4 h-4 text-purple-600" onchange="document.getElementById('q2-other-text').disabled = true">
+              <span>驚いている</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
+              <input type="radio" name="q2" value="怒っている" class="w-4 h-4 text-purple-600" onchange="document.getElementById('q2-other-text').disabled = true">
+              <span>怒っている</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
+              <input type="radio" name="q2" value="よくわからない" class="w-4 h-4 text-purple-600" onchange="document.getElementById('q2-other-text').disabled = true">
+              <span>よくわからない</span>
+            </label>
+          </div>
+          <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer text-sm text-slate-700">
+            <input type="radio" name="q2" value="その他" class="w-4 h-4 text-purple-600" onchange="document.getElementById('q2-other-text').disabled = false; document.getElementById('q2-other-text').focus();">
+            <span>その他:</span>
+            <input type="text" id="q2-other-text" disabled placeholder="感情を入力" class="ml-2 px-2 py-1 border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-purple-500 disabled:bg-slate-100 disabled:cursor-not-allowed">
+          </label>
+        </div>
+
+        <!-- 設問3 -->
+        <div>
+          <label class="block font-medium text-slate-800 text-sm mb-1">③ その判断の確信度(自信) <span class="text-rose-500">*</span></label>
+          <p class="text-xs text-slate-500 mb-3">その感情だと判断したことに、どれくらい自信がありますか?</p>
+          <div class="space-y-2 text-sm text-slate-700">
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
+              <input type="radio" name="q3" value="まったく自信がない" class="w-4 h-4 text-purple-600">
+              <span>まったく自信がない</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
+              <input type="radio" name="q3" value="少し自信がない" class="w-4 h-4 text-purple-600">
+              <span>少し自信がない</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
+              <input type="radio" name="q3" value="どちらともいえない" class="w-4 h-4 text-purple-600">
+              <span>どちらともいえない</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
+              <input type="radio" name="q3" value="少し自信がある" class="w-4 h-4 text-purple-600">
+              <span>少し自信がある</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
+              <input type="radio" name="q3" value="とても自信がある" class="w-4 h-4 text-purple-600">
+              <span>とても自信がある</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="pt-4 flex justify-end items-center gap-4">
+          <span class="text-xs text-slate-400">※時間になると自動で進みます</span>
+          <button type="button" onclick="submitCurrentTrial(false)"
+                  class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded shadow transition">
+            次の設問へ進む
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 実験完了画面 -->
+    <div id="finish-screen" class="hidden bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+      <div class="form-header-bar"></div>
+      <div class="p-6 md:p-8 text-center space-y-6">
+        <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-3xl">
+          ✓
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900 mb-2">実験が完了しました</h2>
+          <p class="text-slate-600 text-sm">ご協力誠にありがとうございました。すべてのデータが正常に記録されました。</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+          <button onclick="downloadCSV()" class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded font-medium shadow text-sm">
+            📥 回答データをCSVでバックアップ保存
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ----------------------------------------------------
+    // 実験設定と試行リスト
+    // ----------------------------------------------------
+    const EXPERIMENT_TRIALS = [
+      { id: 1,  title: "試行 1",  videoUrl: "videos/Dream12.mp4" },
+      { id: 2,  title: "試行 2",  videoUrl: "videos/Dream13.mp4" },
+      { id: 3,  title: "試行 3",  videoUrl: "videos/Dream14.mp4" },
+      { id: 4,  title: "試行 4",  videoUrl: "videos/Dream15.mp4" },
+      { id: 5,  title: "試行 5",  videoUrl: "videos/Dream16.mp4" },
+      { id: 6,  title: "試行 6",  videoUrl: "videos/Dream17.mp4" },
+      { id: 7,  title: "試行 7",  videoUrl: "videos/Dream18.mp4" },
+      { id: 8,  title: "試行 8",  videoUrl: "videos/Dream19.mp4" },
+      { id: 9,  title: "試行 9",  videoUrl: "videos/Dream20.mp4" },
+      { id: 10, title: "試行 10", videoUrl: "videos/Dream21.mp4" },
+      { id: 11, title: "試行 11", videoUrl: "videos/Dream22.mp4" },
+      { id: 12, title: "試行 12", videoUrl: "videos/Dream23.mp4" },
+      { id: 13, title: "試行 13", videoUrl: "videos/Dream24.mp4" },
+      { id: 14, title: "試行 14", videoUrl: "videos/Dream25.mp4" },
+      { id: 15, title: "試行 15", videoUrl: "videos/Dream26.mp4" },
+      { id: 16, title: "試行 16", videoUrl: "videos/Dream27.mp4" },
+      { id: 17, title: "試行 17", videoUrl: "videos/Dream28.mp4" },
+      { id: 18, title: "試行 18", videoUrl: "videos/Dream29.mp4" },
+      { id: 19, title: "試行 19", videoUrl: "videos/Dream30.mp4" },
+      { id: 20, title: "試行 20", videoUrl: "videos/Dream31.mp4" },
+      { id: 21, title: "試行 21", videoUrl: "videos/Dream32.mp4" }
+    ];
+
+    const TRIAL_TIME_LIMIT = 30; // 制限時間 30秒
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/a/macros/ss.p.u-tokyo.ac.jp/s/AKfycbwk7DiOdClt7iKl3aUcwiL3xoSRsH2qZczz8HBMI2H3PIm7sv5a1aJsTBuQ-R012TDp/exec";
+
+    // 内部状態変数
+    let participantId = "";
+    let currentTrialIndex = 0;
+    let trialStartTime = null;
+    let timerInterval = null;
+    let remainingTime = TRIAL_TIME_LIMIT;
+    let collectedResponses = [];
+
+    let warningSynth = null;
+    let currentVideoStarted = false;
+    let videoHardStopTimer = null;
+
+    function startExperiment(event) {
+      event.preventDefault();
+      const input = document.getElementById("participant-id");
+      if (!input.value.trim()) return;
+
+      participantId = input.value.trim();
+
+      try {
+        if (window.Tone) {
+          Tone.start();
+          warningSynth = new Tone.Synth().toDestination();
+        }
+      } catch (e) {
+        console.warn("Audio Context Init:", e);
+      }
+
+      document.getElementById("intro-screen").classList.add("hidden");
+      document.getElementById("trial-screen").classList.remove("hidden");
+
+      loadTrial(currentTrialIndex);
+    }
+
+    function loadTrial(index) {
+      if (videoHardStopTimer) {
+        clearTimeout(videoHardStopTimer);
+        videoHardStopTimer = null;
+      }
+      currentVideoStarted = false;
+
+      if (index >= EXPERIMENT_TRIALS.length) {
+        finishExperiment();
+        return;
+      }
+
+      const trial = EXPERIMENT_TRIALS[index];
+
+      document.getElementById("trial-counter").innerText = `動画 ${index + 1} / ${EXPERIMENT_TRIALS.length}`;
+      document.getElementById("overall-progress").style.width = `${((index) / EXPERIMENT_TRIALS.length) * 100}%`;
+
+      const badge = document.getElementById("video-status-badge");
+      badge.innerText = "再生準備完了";
+      badge.className = "text-xs px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-medium";
+
+      document.getElementById("question-card").classList.add("hidden");
+      document.getElementById("timer-card").classList.add("hidden");
+
+      document.querySelectorAll('input[name="q1"]').forEach(el => el.checked = false);
+      document.querySelectorAll('input[name="q2"]').forEach(el => el.checked = false);
+      document.querySelectorAll('input[name="q3"]').forEach(el => el.checked = false);
+      const otherInput = document.getElementById("q2-other-text");
+      if (otherInput) {
+        otherInput.value = "";
+        otherInput.disabled = true;
+      }
+
+      const video = document.getElementById("stimulus-video");
+      const overlay = document.getElementById("video-overlay");
+      const lockedOverlay = document.getElementById("video-locked-overlay");
+      const errorOverlay = document.getElementById("video-error-overlay");
+
+      lockedOverlay.classList.add("hidden");
+      errorOverlay.classList.add("hidden");
+      overlay.classList.remove("hidden");
+
+      video.onerror = function() {
+        console.error("Video element loading error:", video.error);
+        overlay.classList.add("hidden");
+        errorOverlay.classList.remove("hidden");
+        badge.innerText = "動画読み込みエラー";
+        badge.className = "text-xs px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-medium";
+      };
+
+      video.onended = onVideoEnded;
+      video.src = trial.videoUrl;
+      video.load();
+    }
+
+    function playCurrentVideo() {
+      // 1試行につき再生開始は1回だけ。
+      if (currentVideoStarted) return;
+
+      const video = document.getElementById("stimulus-video");
+      const overlay = document.getElementById("video-overlay");
+      const badge = document.getElementById("video-status-badge");
+      const errorOverlay = document.getElementById("video-error-overlay");
+
+      currentVideoStarted = true;
+      overlay.classList.add("hidden");
+      badge.innerText = "再生中（一時停止不可）";
+      badge.className = "text-xs px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 font-medium";
+
+      // コントロールを表示させず、途中停止をできるだけ防ぐ。
+      video.controls = false;
+      video.muted = false;
+
+      const playPromise = video.play();
+
+      // 動画が8秒を超えていても、実験では8秒で強制終了。
+      videoHardStopTimer = setTimeout(() => {
+        if (!video.paused) {
+          video.currentTime = Math.min(8, video.duration || 8);
+        }
+        onVideoEnded();
+      }, 8000);
+
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          console.error("Playback failed: ", err);
+          if (videoHardStopTimer) clearTimeout(videoHardStopTimer);
+          currentVideoStarted = false;
+          errorOverlay.classList.remove("hidden");
+          badge.innerText = "再生エラー";
+          badge.className = "text-xs px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-medium";
+        });
+      }
+    }
+
+    function skipFailedVideo() {
+      document.getElementById("video-error-overlay").classList.add("hidden");
+      onVideoEnded();
+    }
+
+    function onVideoEnded() {
+      if (videoHardStopTimer) {
+        clearTimeout(videoHardStopTimer);
+        videoHardStopTimer = null;
+      }
+
+      const video = document.getElementById("stimulus-video");
+      const lockedOverlay = document.getElementById("video-locked-overlay");
+      const questionCard = document.getElementById("question-card");
+      const timerCard = document.getElementById("timer-card");
+      const badge = document.getElementById("video-status-badge");
+
+      video.pause();
+      video.onerror = null;
+      video.removeAttribute("src");
+      video.load();
+
+      lockedOverlay.classList.remove("hidden");
+
+      badge.innerText = "再生完了・回答中";
+      badge.className = "text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-medium";
+
+      questionCard.classList.remove("hidden");
+      timerCard.classList.remove("hidden");
+
+      startQuestionTimer();
+    }
+
+    function startQuestionTimer() {
+      remainingTime = TRIAL_TIME_LIMIT;
+      trialStartTime = Date.now();
+      updateTimerDisplay();
+
+      if (timerInterval) clearInterval(timerInterval);
+
+      timerInterval = setInterval(() => {
+        remainingTime -= 0.1;
+
+        if (remainingTime <= 0) {
+          clearInterval(timerInterval);
+          remainingTime = 0;
+          updateTimerDisplay();
+          submitCurrentTrial(true);
+        } else {
+          updateTimerDisplay();
+        }
+      }, 100);
+    }
+
+    function updateTimerDisplay() {
+      const display = document.getElementById("timer-display");
+      const bar = document.getElementById("timer-bar");
+
+      display.innerText = `${Math.max(0, remainingTime).toFixed(1)} 秒`;
+      const percentage = (remainingTime / TRIAL_TIME_LIMIT) * 100;
+      bar.style.width = `${percentage}%`;
+
+      if (remainingTime <= 5.0) {
+        display.classList.add("text-rose-600");
+        display.classList.remove("text-purple-700");
+        bar.classList.add("bg-rose-600");
+        bar.classList.remove("bg-purple-600");
+
+        const intSec = Math.ceil(remainingTime);
+        if (Math.abs(remainingTime - intSec) < 0.08 && (intSec === 5 || intSec === 3 || intSec === 1)) {
+          playBeep();
+        }
+      } else {
+        display.classList.remove("text-rose-600");
+        display.classList.add("text-purple-700");
+        bar.classList.remove("bg-rose-600");
+        bar.classList.add("bg-purple-600");
+      }
+    }
+
+    function playBeep() {
+      if (warningSynth) {
+        try {
+          warningSynth.triggerAttackRelease("C5", "8n");
+        } catch (e) {}
+      }
+    }
+
+    function submitCurrentTrial(isTimeOut = false) {
+      if (timerInterval) clearInterval(timerInterval);
+
+      const q1Selected = document.querySelector('input[name="q1"]:checked');
+      const q2Selected = document.querySelector('input[name="q2"]:checked');
+      const q3Selected = document.querySelector('input[name="q3"]:checked');
+
+      let q2Value = "未回答";
+      let q2OtherText = "";
+      if (q2Selected) {
+        q2Value = q2Selected.value;
+        if (q2Selected.value === "その他") {
+          q2OtherText = document.getElementById("q2-other-text").value.trim();
+        }
+      }
+
+      const timeSpent = ((Date.now() - trialStartTime) / 1000).toFixed(2);
+
+      const responseRecord = {
+        participantId: participantId,
+        trialId: EXPERIMENT_TRIALS[currentTrialIndex].id,
+        q1_situation: q1Selected ? q1Selected.value : "未回答",
+        q2_emotion: q2Value,
+        q2_other_text: q2OtherText,
+        q3_confidence: q3Selected ? q3Selected.value : "未回答",
+        responseTimeSec: timeSpent,
+        isTimeOut: isTimeOut ? "YES" : "NO",
+        timestamp: new Date().toISOString()
+      };
+
+      collectedResponses.push(responseRecord);
+
+      currentTrialIndex++;
+      loadTrial(currentTrialIndex);
+    }
+
+    function finishExperiment() {
+      document.getElementById("trial-screen").classList.add("hidden");
+      document.getElementById("finish-screen").classList.remove("hidden");
+
+      // 実験終了時に全データを一括でGoogle Apps Scriptへ送信
+      if (GOOGLE_SCRIPT_URL) {
+        sendAllDataToGAS({
+          participantId: participantId,
+          trials: collectedResponses
+        });
+      }
+    }
+
+    function downloadCSV() {
+      if (collectedResponses.length === 0) return;
+
+      const headers = ["participantId", "trialId", "q1_situation", "q2_emotion", "q2_other_text", "q3_confidence", "responseTimeSec", "isTimeOut", "timestamp"];
+      const csvRows = [headers.join(",")];
+
+      collectedResponses.forEach(row => {
+        const values = headers.map(header => {
+          const val = row[header] ?? "";
+          return `"${('' + val).replace(/"/g, '""')}"`;
+        });
+        csvRows.push(values.join(","));
+      });
+
+      const bom = new Uint8Array([0xEF, 0xBB, 0xBF]); // UTF-8 BOM
+      const blob = new Blob([bom, csvRows.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `experiment_result_${participantId}_${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function sendAllDataToGAS(payload) {
+      try {
+        fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.error("GAS transmission error:", err);
+      }
+    }
+  </script>
+</body>
+</html>
