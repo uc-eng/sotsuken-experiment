@@ -45,7 +45,7 @@
           <ul class="list-disc list-inside space-y-1">
             <li>各試行で流れる<strong>動画は一度しか再生できません</strong>（巻き戻し・再再生不可）。</li>
             <li>動画終了後、直ちに<strong>30秒の解答カウントダウン</strong>が始まります。</li>
-            <li>設問は各動画につき<strong>3問</strong>あり、全<strong>21試行</strong>です。</li>
+            <li>設問は各動画につき<strong>3問</strong>あります。</li>
             <li><strong>30秒</strong>が経過すると、回答中であっても自動的に次の動画へ移行します。</li>
             <li>途中でブラウザの「戻る」ボタンやリロードは押さないでください。</li>
           </ul>
@@ -295,27 +295,111 @@
     // 実験設定と試行リスト
     // ----------------------------------------------------
     const EXPERIMENT_TRIALS = [
-      { id: 1,  title: "試行 1",  videoUrl: "videos/Dream12.mp4" },
-      { id: 2,  title: "試行 2",  videoUrl: "videos/Dream13.mp4" },
-      { id: 3,  title: "試行 3",  videoUrl: "videos/Dream14.mp4" },
-      { id: 4,  title: "試行 4",  videoUrl: "videos/Dream15.mp4" },
-      { id: 5,  title: "試行 5",  videoUrl: "videos/Dream16.mp4" },
-      { id: 6,  title: "試行 6",  videoUrl: "videos/Dream17.mp4" },
-      { id: 7,  title: "試行 7",  videoUrl: "videos/Dream18.mp4" },
-      { id: 8,  title: "試行 8",  videoUrl: "videos/Dream19.mp4" },
-      { id: 9,  title: "試行 9",  videoUrl: "videos/Dream20.mp4" },
-      { id: 10, title: "試行 10", videoUrl: "videos/Dream21.mp4" },
-      { id: 11, title: "試行 11", videoUrl: "videos/Dream22.mp4" },
-      { id: 12, title: "試行 12", videoUrl: "videos/Dream23.mp4" },
-      { id: 13, title: "試行 13", videoUrl: "videos/Dream24.mp4" },
-      { id: 14, title: "試行 14", videoUrl: "videos/Dream25.mp4" },
-      { id: 15, title: "試行 15", videoUrl: "videos/Dream26.mp4" },
-      { id: 16, title: "試行 16", videoUrl: "videos/Dream27.mp4" },
-      { id: 17, title: "試行 17", videoUrl: "videos/Dream28.mp4" },
-      { id: 18, title: "試行 18", videoUrl: "videos/Dream29.mp4" },
-      { id: 19, title: "試行 19", videoUrl: "videos/Dream30.mp4" },
-      { id: 20, title: "試行 20", videoUrl: "videos/Dream31.mp4" },
-      { id: 21, title: "試行 21", videoUrl: "videos/Dream32.mp4" }
+      {
+        id: 1,
+        title: "試行 1",
+        videoUrl: "videos/Dream%205.MP4"
+      },
+      {
+        id: 2,
+        title: "試行 2",
+        videoUrl: "videos/Dream%206.MP4"
+      },
+      {
+        id: 3,
+        title: "試行 3",
+        videoUrl: "videos/Dream%207.MP4"
+      },
+      {
+        id: 4,
+        title: "試行 4",
+        videoUrl: "videos/Dream%208.MP4"
+      },
+      {
+        id: 5,
+        title: "試行 5",
+        videoUrl: "videos/Dream%209.MP4"
+      },
+      {
+        id: 6,
+        title: "試行 6",
+        videoUrl: "videos/Dream%2010.MP4"
+      },
+      {
+        id: 7,
+        title: "試行 7",
+        videoUrl: "videos/Dream%2011.MP4"
+      },
+      {
+        id: 8,
+        title: "試行 8",
+        videoUrl: "videos/Dream%2012.MP4"
+      },
+      {
+        id: 9,
+        title: "試行 9",
+        videoUrl: "videos/Dream%2013.MP4"
+      },
+      {
+        id: 10,
+        title: "試行 10",
+        videoUrl: "videos/Dream%2014.MP4"
+      },
+      {
+        id: 11,
+        title: "試行 11",
+        videoUrl: "videos/Dream%2015.MP4"
+      },
+      {
+        id: 12,
+        title: "試行 12",
+        videoUrl: "videos/Dream%2016.MP4"
+      },
+      {
+        id: 13,
+        title: "試行 13",
+        videoUrl: "videos/Dream%2017.MP4"
+      },
+      {
+        id: 14,
+        title: "試行 14",
+        videoUrl: "videos/Dream%2018.MP4"
+      },
+      {
+        id: 15,
+        title: "試行 15",
+        videoUrl: "videos/Dream%2019.MP4"
+      },
+      {
+        id: 16,
+        title: "試行 16",
+        videoUrl: "videos/Dream%2020.MP4"
+      },
+      {
+        id: 17,
+        title: "試行 17",
+        videoUrl: "videos/Dream%2021.MP4"
+      },
+      {
+        id: 18,
+        title: "試行 18",
+        videoUrl: "videos/Dream%2022.MP4"
+      },
+      {
+        id: 19,
+        title: "試行 19",
+        videoUrl: "videos/Dream%2023.MP4"
+      },
+      {
+        id: 20,
+        title: "試行 20",
+        videoUrl: "videos/Dream%2024.MP4"
+      },
+      {
+        id: 21,
+        title: "試行 21",
+        videoUrl: "videos/Dream%2025.MP4"
+      }
     ];
 
     const TRIAL_TIME_LIMIT = 30; // 制限時間 30秒
@@ -330,8 +414,6 @@
     let collectedResponses = [];
 
     let warningSynth = null;
-    let currentVideoStarted = false;
-    let videoHardStopTimer = null;
 
     function startExperiment(event) {
       event.preventDefault();
@@ -356,12 +438,6 @@
     }
 
     function loadTrial(index) {
-      if (videoHardStopTimer) {
-        clearTimeout(videoHardStopTimer);
-        videoHardStopTimer = null;
-      }
-      currentVideoStarted = false;
-
       if (index >= EXPERIMENT_TRIALS.length) {
         finishExperiment();
         return;
@@ -411,38 +487,19 @@
     }
 
     function playCurrentVideo() {
-      // 1試行につき再生開始は1回だけ。
-      if (currentVideoStarted) return;
-
       const video = document.getElementById("stimulus-video");
       const overlay = document.getElementById("video-overlay");
       const badge = document.getElementById("video-status-badge");
       const errorOverlay = document.getElementById("video-error-overlay");
 
-      currentVideoStarted = true;
       overlay.classList.add("hidden");
       badge.innerText = "再生中（一時停止不可）";
       badge.className = "text-xs px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 font-medium";
 
-      // コントロールを表示させず、途中停止をできるだけ防ぐ。
-      video.controls = false;
-      video.muted = false;
-
       const playPromise = video.play();
-
-      // 動画が8秒を超えていても、実験では8秒で強制終了。
-      videoHardStopTimer = setTimeout(() => {
-        if (!video.paused) {
-          video.currentTime = Math.min(8, video.duration || 8);
-        }
-        onVideoEnded();
-      }, 8000);
-
       if (playPromise !== undefined) {
         playPromise.catch(err => {
           console.error("Playback failed: ", err);
-          if (videoHardStopTimer) clearTimeout(videoHardStopTimer);
-          currentVideoStarted = false;
           errorOverlay.classList.remove("hidden");
           badge.innerText = "再生エラー";
           badge.className = "text-xs px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-medium";
@@ -456,11 +513,6 @@
     }
 
     function onVideoEnded() {
-      if (videoHardStopTimer) {
-        clearTimeout(videoHardStopTimer);
-        videoHardStopTimer = null;
-      }
-
       const video = document.getElementById("stimulus-video");
       const lockedOverlay = document.getElementById("video-locked-overlay");
       const questionCard = document.getElementById("question-card");
